@@ -10,6 +10,9 @@ const App = () => {
   const increaseByOne = () => setGood(good + 1)
   const increaseByOne1 = () => setNeutral(neutral + 1)
   const increaseByOne2 = () => setBad(bad + 1)
+  const all = good + neutral + bad
+  const average = (good - bad)/all
+  const positive = (good / all) * 100 + ' %'
 
   return (
     <div>
@@ -21,6 +24,9 @@ const App = () => {
       <StatisticLine text = 'good' value = {good}/>
       <StatisticLine text = 'neutral' value = {neutral}/>
       <StatisticLine text = 'bad' value = {bad}/>
+      <StatisticLine text = 'all' value = {all}/>
+      <StatisticLine text = 'average' value = {average}/>
+      <StatisticLine text = 'positive' value = {positive} />
     </div>
   )
 }
