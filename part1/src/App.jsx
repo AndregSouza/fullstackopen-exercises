@@ -26,27 +26,17 @@ const App = () => {
 
   return (
     <div>
-      <Title text = 'give feedback'/>
-      <button onClick={increaseByOne}> good </button>
-      <button onClick={increaseByOne1}> neutral </button>
-      <button onClick={increaseByOne2}> bad </button>
-      <Title text = 'statistics'/>
+      <h1> give feedback </h1>
+      <Button handleClick = {increaseByOne} text = 'good' />
+      <Button handleClick = {increaseByOne1} text = 'neutral' />
+      <Button handleClick = {increaseByOne2} text = 'bad' />
+      <h1> statistics </h1>
       <Statistics goodCount = {good} neutralCount = {neutral} badCount = {bad} allCount = {all} averageCount = {average} positiveCount = {positive} />
     </div>
   )
 }
 
-const Title = ({text}) => {
-  return(
-    <h1>
-      {text}
-    </h1>
-  )
-}
-
 const Statistics = (props) => {
-  console.log(props)
-  
   if(props.goodCount == 0 && props.neutralCount == 0 && props.badCount == 0){
     return(
       <p>
@@ -67,11 +57,14 @@ const Statistics = (props) => {
   )
 }
 
-const StatisticLine = (props) =>{
+const StatisticLine = ({text, value}) => <p> {text} {value} </p>
+
+const Button = ({handleClick, text}) => {
+  console.log(handleClick)
   return(
-    <p>
-      {props.text} {props.value}
-    </p>
+    <button onClick = {handleClick}>
+      {text}
+    </button>
   )
 }
 
