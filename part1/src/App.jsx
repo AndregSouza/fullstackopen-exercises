@@ -1,84 +1,30 @@
 import { useState } from 'react'
 
 const App = () => {
-  // save clicks of each button to its own state
+  const anecdotes = [
+    'If it hurts, do it more often.',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'The only way to go fast, is to go well.'
+  ]
+   
+  const [selected, setSelected] = useState(0)
 
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-  const [all, setAll] = useState([])
-  const average = (good - bad) / (all.length)
-  const positive = (good / (all.length)) * 100
-
-  const increaseByOne = () => {
-    setGood(good + 1)
-    setAll(all.concat(1))
-  }
-
-  const increaseByOne1 = () => {
-    setNeutral(neutral + 1)
-    setAll(all.concat(1))
-  }
-  const increaseByOne2 = () => {
-    setBad(bad + 1)
-    setAll(all.concat(1))
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
   }
 
   return (
+    <>
     <div>
-      <h1> give feedback </h1>
-      <Button handleClick={increaseByOne} text='good' />
-      <Button handleClick={increaseByOne1} text='neutral' />
-      <Button handleClick={increaseByOne2} text='bad' />
-      <h1> statistics </h1>
-      <Statistics goodCount={good} neutralCount={neutral} badCount={bad} allCount={all} averageCount={average} positiveCount={positive} />
+    {anecdotes[selected]}
     </div>
-  )
-}
-
-const Statistics = (props) => {
-  if (props.goodCount == 0 && props.neutralCount == 0 && props.badCount == 0) {
-    return (
-      <p>
-        No feedbacks given
-      </p>
-    )
-  }
-  
-  return (
-    <table>
-      <tbody>
-        <tr>
-          <td> <StatisticLine text='good' value={props.goodCount} /> </td>
-        </tr>
-        <tr>
-          <td> <StatisticLine text='neutral' value={props.neutralCount} /> </td>
-        </tr>
-        <tr>
-          <td> <StatisticLine text='bad' value={props.badCount} /> </td>
-        </tr>
-        <tr>
-          <td> <StatisticLine text='all' value={props.allCount.length} /> </td>
-        </tr>
-        <tr>
-          <td> <StatisticLine text='average' value={props.averageCount} /> </td>
-        </tr>
-        <tr>
-          <td> <StatisticLine text='positive' value={props.positiveCount} /> </td>
-        </tr>
-      </tbody>
-    </table>
-  )
-}
-
-const StatisticLine = ({ text, value }) => <p> {text} {value} </p>
-
-const Button = ({ handleClick, text }) => {
-  console.log(handleClick)
-  return (
-    <button onClick={handleClick}>
-      {text}
-    </button>
+    <button onClick={() => setSelected(getRandomInt(8))}> next anecdote </button>
+    </>
   )
 }
 
