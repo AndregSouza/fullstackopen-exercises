@@ -27,42 +27,56 @@ const App = () => {
   return (
     <div>
       <h1> give feedback </h1>
-      <Button handleClick = {increaseByOne} text = 'good' />
-      <Button handleClick = {increaseByOne1} text = 'neutral' />
-      <Button handleClick = {increaseByOne2} text = 'bad' />
+      <Button handleClick={increaseByOne} text='good' />
+      <Button handleClick={increaseByOne1} text='neutral' />
+      <Button handleClick={increaseByOne2} text='bad' />
       <h1> statistics </h1>
-      <Statistics goodCount = {good} neutralCount = {neutral} badCount = {bad} allCount = {all} averageCount = {average} positiveCount = {positive} />
+      <Statistics goodCount={good} neutralCount={neutral} badCount={bad} allCount={all} averageCount={average} positiveCount={positive} />
     </div>
   )
 }
 
 const Statistics = (props) => {
-  if(props.goodCount == 0 && props.neutralCount == 0 && props.badCount == 0){
-    return(
+  if (props.goodCount == 0 && props.neutralCount == 0 && props.badCount == 0) {
+    return (
       <p>
         No feedbacks given
       </p>
     )
   }
   
-  return(
-    <div>
-      <StatisticLine text = 'good' value = {props.goodCount}/>
-      <StatisticLine text = 'neutral' value = {props.neutralCount}/>
-      <StatisticLine text = 'bad' value = {props.badCount}/>
-      <StatisticLine text = 'all' value = {props.allCount.length}/>
-      <StatisticLine text = 'average' value = {props.averageCount}/>
-      <StatisticLine text = 'positive' value = {props.positiveCount} />
-    </div>
+  return (
+    <table>
+      <tbody>
+        <tr>
+          <td> <StatisticLine text='good' value={props.goodCount} /> </td>
+        </tr>
+        <tr>
+          <td> <StatisticLine text='neutral' value={props.neutralCount} /> </td>
+        </tr>
+        <tr>
+          <td> <StatisticLine text='bad' value={props.badCount} /> </td>
+        </tr>
+        <tr>
+          <td> <StatisticLine text='all' value={props.allCount.length} /> </td>
+        </tr>
+        <tr>
+          <td> <StatisticLine text='average' value={props.averageCount} /> </td>
+        </tr>
+        <tr>
+          <td> <StatisticLine text='positive' value={props.positiveCount} /> </td>
+        </tr>
+      </tbody>
+    </table>
   )
 }
 
-const StatisticLine = ({text, value}) => <p> {text} {value} </p>
+const StatisticLine = ({ text, value }) => <p> {text} {value} </p>
 
-const Button = ({handleClick, text}) => {
+const Button = ({ handleClick, text }) => {
   console.log(handleClick)
-  return(
-    <button onClick = {handleClick}>
+  return (
+    <button onClick={handleClick}>
       {text}
     </button>
   )
