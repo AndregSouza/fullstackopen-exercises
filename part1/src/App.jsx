@@ -14,6 +14,22 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
 
+  const [votes, setVotes] = useState(new Uint8Array(8))
+  
+  function hooklineFunction (selected) {
+    const votesUpdated = votes.map(
+      function (_,index){
+        if (index == selected){
+          return votes[selected]+1
+        }
+        else {
+          return votes[index]
+        }
+      }
+    )
+    setVotes(votesUpdated)
+  }
+
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
@@ -23,6 +39,10 @@ const App = () => {
     <div>
     {anecdotes[selected]}
     </div>
+    <div>
+    has {votes[selected]}
+    </div>
+    <button onClick={() => hooklineFunction(selected)}> vote </button>
     <button onClick={() => setSelected(getRandomInt(8))}> next anecdote </button>
     </>
   )
