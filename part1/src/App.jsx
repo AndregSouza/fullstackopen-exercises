@@ -13,6 +13,24 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Uint8Array(8))
+
+  function handleIncrementClick (selected) {
+    const votesUpdated = votes.map(
+      function(_, index) {
+        console.log (index)
+        console.log(selected)
+        if(selected == index) {
+          return votes[selected]+1
+        }
+        else {
+          return votes[index]
+        }
+      }
+    )
+  console.log(votesUpdated)
+  setVotes(votesUpdated)
+  }
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -20,10 +38,14 @@ const App = () => {
 
   return (
     <>
-    <div>
-    {anecdotes[selected]}
-    </div>
-    <button onClick={() => setSelected(getRandomInt(8))}> next anecdote </button>
+      <div>
+        {anecdotes[selected]}
+        <p>
+          has {votes[selected]} votes
+        </p>
+      </div>
+      <button onClick={() => handleIncrementClick(selected)}> vote </button>
+      <button onClick={() => setSelected(getRandomInt(8))}> next anecdote </button>
     </>
   )
 }
