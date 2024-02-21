@@ -13,8 +13,8 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-
   const [votes, setVotes] = useState(new Uint8Array(8))
+  const [biggest, setBiggest] = useState(anecdotes[selected])
   
   function hooklineFunction (selected) {
     const votesUpdated = votes.map(
@@ -28,6 +28,19 @@ const App = () => {
       }
     )
     setVotes(votesUpdated)
+    verifyBiggest(votesUpdated)
+  }
+
+  function verifyBiggest (votesUpdated) {
+    let biggerNumber = 0
+    let biggestIndex = 0
+    for (let index = 0; index < votesUpdated.length; index++) {
+      if (votesUpdated[index] > biggerNumber) {
+        biggerNumber = votesUpdated[index]
+        biggestIndex = index
+      }
+    }
+    setBiggest(anecdotes[biggestIndex])
   }
 
   function getRandomInt(max) {
@@ -36,14 +49,14 @@ const App = () => {
 
   return (
     <>
-    <div>
-    {anecdotes[selected]}
-    </div>
-    <div>
-    has {votes[selected]}
-    </div>
+    <h1>Anecdote of the day</h1>
+    <div> {anecdotes[selected]} </div>
+    <div> has {votes[selected]} </div>
     <button onClick={() => hooklineFunction(selected)}> vote </button>
     <button onClick={() => setSelected(getRandomInt(8))}> next anecdote </button>
+
+    <h1>Anecdote with most votes</h1>
+    <div> {biggest} </div>
     </>
   )
 }
