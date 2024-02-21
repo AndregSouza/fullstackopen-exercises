@@ -1,10 +1,13 @@
 const Course = (props) => {
   console.log(props.course.parts);
+  const initialValue = 0
   return(
     <>
       <h1>{props.course.name}</h1>
       <ul>
         {props.course.parts.map(content => <li key = {content.id}> {content.name} {content.exercises}</li>)}
+        {props.course.parts.reduce((sum, course) => sum + course.exercises, 0)
+        } 
       </ul>
     </>
   )
