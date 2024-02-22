@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import PersonList from './components/PersonList'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -16,7 +19,6 @@ const App = () => {
     let sameName = false
     let sameNumber = false
 
-    //verify for duplicates in the array
     persons.map(object => {if (object.name == newName) {sameName = true} })
     persons.map(object => {if (object.number == newNumber) {sameNumber = true} })
 
@@ -41,10 +43,9 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
-  const handleFilterChange =(event) =>{
+  const handleFilterChange = (event) =>{
     console.log(event.target.value);
     setNewFilter(event.target.value)
-    // needs an updater function because React states asynchronously)
     console.log(newFilter);
     setPersons(persons.filter(function(object){
       console.log(object);
@@ -55,44 +56,17 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        <div>
-          filter shown with 
-          <input 
-            value ={newFilter}
-            onChange = {handleFilterChange}
-          />
-        </div>
-      </form>
-      
-      <h2>add a new</h2>
-      <form>
-        <div>
-          name: 
-          <input 
-            value ={newName}
-            onChange = {handleNameChange}
-          />
-        </div>
-        <div>
-          number: 
-          <input 
-            value ={newNumber}
-            onChange = {handleNumberChange}
-          />
-        </div>
-        <div>
-          <button onClick={addPerson} type="submit">add</button>
-        </div>
-      </form>
+
+      <Filter newFilterValue = {newFilter} onChangeFunction = {handleFilterChange} />
+
+      <h2>Add a new</h2>
+
+      <PersonForm newNameValue = {newName} onNameChangeFunction = {handleNameChange} newNumberValue = {newNumber} onNumberChangeFunction = {handleNumberChange} functionButton = {addPerson} />
+
       <h2>Numbers</h2>
-      {persons.map(function(prop,i){
-        return(
-          <>
-            <li key = {i} >{prop.name} / {prop.number} </li>
-          </>
-        )
-      })}
+
+      <PersonList array = {persons}/>
+
     </div>
   )
 }
