@@ -18,19 +18,46 @@ const App = () => {
       })
   }, [])
 
-  console.log(personsService)
+  const verifyDuplicates = (props) => props.some(person => (person.name === newName) || (person.number === newNumber))
 
   const addPerson = (event) => {
     event.preventDefault()
-    let sameName = false
-    let sameNumber = false
 
-    persons.map(object => { if (object.name == newName) { sameName = true } })
-    persons.map(object => { if (object.number == newNumber) { sameNumber = true } })
+    if (verifyDuplicates(persons) == true) {
+      if ((window.confirm(`${newName} or ${newNumber} is already added to phonebook, replace the old number with a new one?`))) {
 
-    if ((sameName == true) || (sameNumber == true)) {
-      return alert(`${newName} ou ${newNumber} is already added to phonebook`)
+        const personObject = { name: newName, number: newNumber }
+        let arrayId = 0
+
+        console.log(personObject);
+
+        let arrayUpdated = persons.map(function(props){
+          console.log(props)
+          if (props.name == newName) {
+            arrayId = props.id
+            console.log(arrayId);
+            return { name: props.name, number: newNumber, id:props.id}
+          }
+          else{
+            return { name: props.name, number: props.number, id:props.id }
+          }
+        })
+
+        console.log(arrayUpdated);
+        console.log(arrayId);
+
+          setPersons(arrayUpdated)
+          personsService
+            .update(arrayId, personObject)
+            .then(returnedPerson => {
+              setPersons(arrayUpdated)
+
+              setNewName('')
+              setNewNumber('')
+            })
+      }
     }
+
     else {
       const personObject = { name: newName, number: newNumber }
       setPersons(persons.concat(personObject))
@@ -46,37 +73,24 @@ const App = () => {
     }
   }
 
-
   const deletePerson = (propID, propName) => {
     if (window.confirm(`Delete '${propName}' ?`)) {
-      console.log(propID);
-      personsService
-        .deleteItem(propID)
-        .then(returnedPerson => {
-          setPersons(persons.filter(function (object) {
-            !object.id.includes(propID)
-          }))
-        })
+      personsService.deleteItem(propID)
+      setPersons(persons.filter(object => !object.id.includes(propID)))
     }
   }
 
-
   const handleNameChange = (event) => {
-    console.log(event.target.value);
     setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
-    console.log(event.target.value);
     setNewNumber(event.target.value)
   }
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value);
     setNewFilter(event.target.value)
-    console.log(newFilter);
     setPersons(persons.filter(function (object) {
-      console.log(object);
       return object.name.includes(event.target.value)
     }))
   }
