@@ -4,66 +4,45 @@ import PersonForm from './components/PersonForm'
 import PersonList from './components/PersonList'
 import personsService from './services/persons'
 
+const verifyDuplicates = function(persons, inputPersonObject) {
+  return persons.some((currentArray) => {
+    if (((currentArray.name === inputPersonObject.name) || (currentArray.number === inputPersonObject.number)) == true) {
+      return true
+    }
+  })
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [filteredPersons, setNewFilteredPersons] = useState ([])
 
   useEffect(() => {
     personsService
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
+        setNewFilteredPersons(initialPersons)
       })
   }, [])
 
-  const verifyDuplicates = (props) => props.some(person => (person.name === newName) || (person.number === newNumber))
-
   const addPerson = (event) => {
     event.preventDefault()
+    const inputPersonObject = { name: newName, number: newNumber }
 
-    if (verifyDuplicates(persons) == true) {
-      if ((window.confirm(`${newName} or ${newNumber} is already added to phonebook, replace the old number with a new one?`))) {
-
-        const personObject = { name: newName, number: newNumber }
-        let arrayId = 0
-
-        console.log(personObject);
-
-        let arrayUpdated = persons.map(function(props){
-          console.log(props)
-          if (props.name == newName) {
-            arrayId = props.id
-            console.log(arrayId);
-            return { name: props.name, number: newNumber, id:props.id}
-          }
-          else{
-            return { name: props.name, number: props.number, id:props.id }
-          }
-        })
-
-        console.log(arrayUpdated);
-        console.log(arrayId);
-
-          setPersons(arrayUpdated)
-          personsService
-            .update(arrayId, personObject)
-            .then(returnedPerson => {
-              setPersons(arrayUpdated)
-
-              setNewName('')
-              setNewNumber('')
-            })
+    if (verifyDuplicates(persons,inputPersonObject) == true){
+      if (window.confirm(`${newName} or ${newNumber} is already added to phonebook, replace the old number with a new one?`)){
+        return updatePerson(inputPersonObject)
       }
     }
 
     else {
-      const personObject = { name: newName, number: newNumber }
-      setPersons(persons.concat(personObject))
+      setPersons(persons.concat(inputPersonObject))
 
       personsService
-        .create(personObject)
+        .create(inputPersonObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
 
@@ -71,6 +50,32 @@ const App = () => {
           setNewNumber('')
         })
     }
+  }
+
+  const updatePerson = (inputPersonObject) => {
+    
+    let arrayId = 0
+
+    let arrayUpdated = persons.map(function(props){
+
+      if (props.name == newName) {
+        arrayId = props.id
+        return { name: props.name, number: newNumber, id:props.id}
+      }
+      else{
+        return { name: props.name, number: props.number, id:props.id }
+      }
+    })
+
+      setPersons(arrayUpdated)
+      personsService
+        .update(arrayId, inputPersonObject)
+        .then(returnedPerson => {
+          setPersons(arrayUpdated)
+
+          setNewName('')
+          setNewNumber('')
+        })
   }
 
   const deletePerson = (propID, propName) => {
@@ -89,8 +94,9 @@ const App = () => {
   }
 
   const handleFilterChange = (event) => {
+    console.log(event.target.value);
     setNewFilter(event.target.value)
-    setPersons(persons.filter(function (object) {
+    setNewFilteredPersons(persons.filter(function (object) {
       return object.name.includes(event.target.value)
     }))
   }
@@ -107,7 +113,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <PersonList array={persons} functionButtonDelete={deletePerson} />
+      <PersonList array={filteredPersons} functionButtonDelete={deletePerson} />
 
     </div>
   )
