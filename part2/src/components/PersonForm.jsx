@@ -1,4 +1,5 @@
 const PersonForm = (object) => {
+    console.log(object);
     return(
         <form>
             <div>

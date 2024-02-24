@@ -1,8 +1,9 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = 'https://studies.cs.helsinki.fi/restcountries/api/all'
 
 const getAll = () => {
     const request = axios.get(baseUrl)
+    console.log(request);
     return request.then(response => response.data)
 }
 
@@ -19,6 +20,5 @@ const update = (id, newObject) => {
 const deleteItem = (id, name) => {
     return axios.delete(`${baseUrl}/${id}`)
 }
-
 
 export default {getAll, create, update, deleteItem}

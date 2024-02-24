@@ -1,4 +1,5 @@
 const Filter = (object) => {
+  console.log(object);
   return (
     <form>
         <div>
