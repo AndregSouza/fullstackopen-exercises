@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import PersonList from './components/PersonList'
+import Notification from './components/Notification'
 import personsService from './services/persons'
+import './index.css'
 
 const verifyDuplicates = function(persons, inputPersonObject) {
   return persons.some((currentArray) => {
@@ -18,6 +20,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [filteredPersons, setNewFilteredPersons] = useState ([])
+  const [notifications, setNotificationMessage] = useState(null)
+
+
 
   useEffect(() => {
     personsService
@@ -27,6 +32,8 @@ const App = () => {
         setNewFilteredPersons(initialPersons)
       })
   }, [])
+
+
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -44,11 +51,19 @@ const App = () => {
       personsService
         .create(inputPersonObject)
         .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
+          console.log(returnedPerson);
+          
+          setNotificationMessage(`Added ${returnedPerson.name}`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000);
 
+          setPersons(persons.concat(returnedPerson))
+          setNewFilteredPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
         })
+        .catch
     }
   }
 
@@ -71,8 +86,13 @@ const App = () => {
       personsService
         .update(arrayId, inputPersonObject)
         .then(returnedPerson => {
+          console.log(returnedPerson);
+          setNotificationMessage(`Updated ${returnedPerson.name}`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000);
           setPersons(arrayUpdated)
-
+          setNewFilteredPersons(arrayUpdated)
           setNewName('')
           setNewNumber('')
         })
@@ -82,6 +102,7 @@ const App = () => {
     if (window.confirm(`Delete '${propName}' ?`)) {
       personsService.deleteItem(propID)
       setPersons(persons.filter(object => !object.id.includes(propID)))
+      setNewFilteredPersons((persons.filter(object => !object.id.includes(propID))))
     }
   }
 
@@ -104,6 +125,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={notifications} />
 
       <Filter newFilterValue={newFilter} onChangeFunction={handleFilterChange} />
 
