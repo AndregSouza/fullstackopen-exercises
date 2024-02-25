@@ -1,5 +1,5 @@
 const List = (object) => {
-
+  
   if (object.array.length > 11) {
     return <li> Too many matches, specify another filter </li>
   }
@@ -21,13 +21,14 @@ const List = (object) => {
         
         {valuesOfLanguage.map(function (prop, i){
           return(
-            <li key = {i}> {prop} </li>
+            <li> {prop} </li>
           )
         })}
 
         <br />
         <br />
         <img src={country.flags.png} alt="" />
+
       </>
     )
   }
@@ -37,8 +38,10 @@ const List = (object) => {
       function (prop, index) {
         console.log(prop, prop.length);
         return (
-          <li key={index}> {prop.name.common}
-          </li>)
+            <li> {prop.name.common}
+            <button onClick={() => object.onClickFunction(prop.name.common)}>show</button>
+            </li>
+        )
       }
     )
   }
