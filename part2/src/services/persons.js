@@ -21,4 +21,9 @@ const deleteItem = (id, name) => {
     return axios.delete(`${baseUrl}/${id}`)
 }
 
-export default {getAll, create, update, deleteItem}
+const getWeather = (cityname, APIkey) => {
+    const request = axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${APIkey}`)
+    return request.then(response => response.data)
+}
+
+export default { getAll, create, update, deleteItem, getWeather }

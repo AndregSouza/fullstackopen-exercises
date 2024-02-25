@@ -1,13 +1,15 @@
 const List = (object) => {
-  
+
+  console.log(object);
+
+  const country = object.array[0]
+    
   if (object.array.length > 11) {
     return <li> Too many matches, specify another filter </li>
   }
 
-  else if (object.array.length === 1) {
-    const country = object.array[0]
-    console.log(country.languages);
-
+  else if ((object.array.length === 1) && (object.weather != null)) {
+    
     let valuesOfLanguage = Object.values(country.languages)
 
     return (
@@ -29,6 +31,9 @@ const List = (object) => {
         <br />
         <img src={country.flags.png} alt="" />
 
+        <h2>Weather in {country.capital} </h2>
+        <li>{object.weather.main.temp}</li>
+        <li>{object.weather.wind.speed}</li>
       </>
     )
   }
@@ -48,3 +53,6 @@ const List = (object) => {
 }
 
 export default List
+
+/*  
+*/

@@ -164,31 +164,50 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import List from './components/List'
 import personsService from './services/persons'
+const api_key = import.meta.env.VITE_SOME_KEY
 
 const App = () => {
-  const [newFilter, setNewFilter] = useState('')
+  const [filter, setFilter] = useState('')
   const [results, setResults] = useState([])
   const [filteredResults, setFilteredResults] = useState([])
+  const [capital, setCapital] = useState(null)
+  const [weatherOfCapital, setWeatherOfCapital] = useState(null)
 
 
   useEffect(() => {
     personsService
       .getAll()
-      .then(initialPersons => {
-        setResults(initialPersons)
-        setFilteredResults(initialPersons)
+      .then(initialList => {
+        setResults(initialList)
+        setFilteredResults(initialList)
       })
   }, [])
 
+  useEffect(() => {
+    console.log('effect run, capital is now', capital);
+    console.log(capital);
+
+    if (capital) {
+      console.log('fetching weather', capital);
+      personsService
+        .getWeather(capital, api_key)
+        .then(initialWeather => {
+          setWeatherOfCapital(initialWeather)
+        })
+    }
+  }, [capital])
+
   const handleFilterChange = (event) => {
     const filterValue = event.target.value
-    setNewFilter(filterValue)
+    setFilter(filterValue)
     setFilteredResults(results.filter(function (object) {
       return object.name.common.includes(filterValue)
     }))
   }
 
+
   const handleClickChange = (event) => {
+    setCapital(event)
     setFilteredResults(results.filter(function (object) {
       return object.name.common.includes(event)
     }))
@@ -196,9 +215,9 @@ const App = () => {
 
   return (
     <>
-      <Filter newFilterValue={newFilter} onChangeFunction={handleFilterChange} />
+      <Filter filterValue={filter} onChangeFunction={handleFilterChange} />
       <ul>
-        <List array={filteredResults} onClickFunction={handleClickChange} />
+        <List array={filteredResults} weather={weatherOfCapital} onClickFunction={handleClickChange} />
       </ul>
     </>
   )
